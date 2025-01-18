@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stocks-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stocks-manager
+  template:
+    metadata:
+      labels:
+        app: stocks-manager
+    spec:
+      containers:
+      - name: stocks-manager
+        image: <dockerhub-username>/stocks-manager:latest
+        ports:
+        - containerPort: 5000
