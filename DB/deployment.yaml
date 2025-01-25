@@ -1,7 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stocks-manager
+  name: stocks-manager-deployment
+  namespace: stocks-app
+  labels:
+    app: stocks-manager
 spec:
   replicas: 1
   selector:
@@ -14,6 +17,13 @@ spec:
     spec:
       containers:
       - name: stocks-manager
-        image: <dockerhub-username>/stocks-manager:latest
+        image: stocks-manager:latest
         ports:
         - containerPort: 5000
+        volumeMounts:  # Mount the PVC to the container
+        - name: stocks-manager-volume
+          mountPath: /app/data  # Application's data directory
+      volumes:
+      - name: stocks-manager-volume
+        persistentVolumeClaim:
+          claimName: stocks-manager-pvc  # References the PVC

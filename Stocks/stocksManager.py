@@ -8,7 +8,6 @@ import DB.MongoDBService as mongoDBService
 
 STOCKS_FIELDS = ['id', 'symbol', 'name', 'shares', 'purchase price', 'purchase date']
 
-COLLECTION_NAME = os.getenv("COLLECTION_NAME", "stocks1")
 class StocksManager:
     def get_stocks(self, query_params = None):
         """
@@ -18,7 +17,7 @@ class StocksManager:
         :return: A list of stocks (JSON representation) matching the query parameters.
         """
         query_params = query_params if query_params else {}
-        stocks = mongoDBService.get_stocks(COLLECTION_NAME, query_params)
+        stocks = mongoDBService.get_stocks(query_params)
         for stock in stocks:
             stock["_id"] = str(stock["_id"])  # Convert ObjectId to string
             
@@ -35,7 +34,7 @@ class StocksManager:
         
         try:
             # Insert the stock into MongoDB and retrieve the generated ID
-            inserted_id = mongoDBService.create_stock(COLLECTION_NAME, stockData)
+            inserted_id = mongoDBService.create_stock(stockData)
         except DuplicateKeyError:
             # Handle duplicate symbols if a unique index is enforced
             raise DuplicateStockError("Stock with the same symbol already exists")
@@ -50,7 +49,7 @@ class StocksManager:
         return self.get_stock_by_id(stock_id)
 
     def get_stock_by_id(self, stock_id):
-        stock = mongoDBService.get_stock_by_id(COLLECTION_NAME, stock_id)
+        stock = mongoDBService.get_stock_by_id(stock_id)
         if not stock:
             raise StockNotFoundError("Not found")
         
@@ -60,7 +59,7 @@ class StocksManager:
 
     def delete_stock(self, stock_id):
         try:
-            result = mongoDBService.delete_stock(COLLECTION_NAME, stock_id)
+            result = mongoDBService.delete_stock(stock_id)
             if result.deleted_count == 0:
                 raise StockNotFoundError("Not found")
         except Exception as e:
@@ -72,7 +71,7 @@ class StocksManager:
             raise RequiredFieldMissingError("Invalid input. Stock ID must match the URL")
         
         stock_symbol = stockData.get('symbol')
-        stock = mongoDBService.get_stock_by_symbol(COLLECTION_NAME, stock_symbol)
+        stock = mongoDBService.get_stock_by_symbol(stock_symbol)
         
         # Check if there is any stock with the same symbol but different ID
         for s in stock:
@@ -80,7 +79,7 @@ class StocksManager:
                 raise DuplicateStockError("Stock with the same symbol already exists")
         
         stockData.pop('id')
-        result = mongoDBService.update_stock(COLLECTION_NAME, stockData, stock_id)
+        result = mongoDBService.update_stock(stockData, stock_id)
         if result.matched_count == 0:
             raise StockNotFoundError("Not found")
         
@@ -94,7 +93,7 @@ class StocksManager:
         return formatted_date
 
     def get_portfolio_value(self):
-        stocks = mongoDBService.get_stocks(COLLECTION_NAME)
+        stocks = mongoDBService.get_stocks()
         totalValue = 0
         
         for stock in stocks:

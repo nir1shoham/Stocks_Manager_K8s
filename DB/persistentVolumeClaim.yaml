@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stocks-manager-pvc
+  namespace: stocks-app  # Matches the namespace of the deployment
+  labels:
+    app: stocks-manager
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi  # Matches the PV size
+  storageClassName: standard  # Ensure this matches the PV
