@@ -4,10 +4,11 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from Core.Exceptions import StockNotFoundError
 
-uri = "mongodb://mongodb:27017/"
+uri = "mongodb://db-service:27017/"
 client = MongoClient(uri)
 COLLECTION_NAME = "stocks"
 db = client[COLLECTION_NAME]
+
 
 def get_stocks(query_params = {}):
     try:
