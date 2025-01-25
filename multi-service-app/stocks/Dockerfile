@@ -6,8 +6,8 @@ WORKDIR /Stocks
 # Copy the rest of the application files into the container
 
 COPY ./Core ./Core
-COPY ./DB ./DB
-COPY ./Stocks .
+COPY ./database ./database
+COPY ./stocks .
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt

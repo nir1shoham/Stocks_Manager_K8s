@@ -2,7 +2,7 @@ from Core.Exceptions import *
 from datetime import datetime
 from Core.stockValue import get_stock_price
 from pymongo.errors import DuplicateKeyError
-import DB.MongoDBService as mongoDBService
+import database.MongoDBService as mongoDBService
 
 STOCKS_FIELDS = ['id', 'symbol', 'name', 'shares', 'purchase price', 'purchase date']
 

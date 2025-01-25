@@ -6,8 +6,8 @@ WORKDIR /CapitalGains
 # Copy relevant application files and directories
 
 COPY ./Core ./Core
-COPY ./Stocks ./Stocks
-COPY ./CapitalGains .
+COPY ./stocks ./stocks
+COPY ./capital-gains .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
