@@ -22,7 +22,7 @@ spec:
         - containerPort: 27017
         volumeMounts:  # Mount the PVC to the container
         - name: mongodb-volume
-          mountPath:   # Application's data directory
+          mountPath: /data/db
       volumes:
       - name: mongodb-volume
         persistentVolumeClaim:

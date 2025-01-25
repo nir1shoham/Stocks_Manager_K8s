@@ -1,9 +1,7 @@
 from Core.Exceptions import *
 from datetime import datetime
 from Core.stockValue import get_stock_price
-import os
 from pymongo.errors import DuplicateKeyError
-from datetime import datetime
 import DB.MongoDBService as mongoDBService
 
 STOCKS_FIELDS = ['id', 'symbol', 'name', 'shares', 'purchase price', 'purchase date']
@@ -119,7 +117,6 @@ class StocksManager:
             "ticker": price,
             "stock value": stock["shares"] * price
         }
-        
 
     def validate_stock_data(self, data, update=False):
         required_fields = ['symbol', 'shares', 'purchase price'] if not update else STOCKS_FIELDS

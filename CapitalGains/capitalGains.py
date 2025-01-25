@@ -5,7 +5,7 @@ from Core.Exceptions import *
 
 def get_stocks_with_filter(query_params: dict = {}) -> dict:
     
-    service = "http://stock-service:8000/stocks"
+    service = "http://stocks-service:8000/stocks"
     
     stocks = {}
 

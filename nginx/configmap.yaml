@@ -18,7 +18,7 @@ data:
         default_type application/octet-stream;
 
         upstream stocks {
-            server stocks-manager-service:8000;
+            server stocks-service:8000;
         }
 
         upstream capital-gains {
