@@ -1,29 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stocks-manager-deployment
-  namespace: stocks-app
+  name: db-deployment
+  namespace: stocks-manager
   labels:
-    app: stocks-manager
+    app: mongodb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: stocks-manager
+      app: mongodb
   template:
     metadata:
       labels:
-        app: stocks-manager
+        app: mongodb
     spec:
       containers:
-      - name: stocks-manager
-        image: stocks-manager:latest
+      - name: mongodb
+        image: mongo:latest
         ports:
-        - containerPort: 5000
+        - containerPort: 27017
         volumeMounts:  # Mount the PVC to the container
-        - name: stocks-manager-volume
-          mountPath: /app/data  # Application's data directory
+        - name: mongodb-volume
+          mountPath:   # Application's data directory
       volumes:
-      - name: stocks-manager-volume
+      - name: mongodb-volume
         persistentVolumeClaim:
-          claimName: stocks-manager-pvc  # References the PVC
+          claimName: db-pvc  # References the PVC

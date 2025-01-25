@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: stocks-manager-service
-  namespace: stocks-app  # Add namespace to match your deployment
+  name: db-service
+  namespace: stocks-manager  # Add namespace to match your deployment
   labels:
-    app: stocks-manager
+    app: mongodb
 spec:
-  selector:
-    app: stocks-manager  # Ensure this matches the `app` label in the deployment
+  type: ClusterIP
   ports:
-    - protocol: TCP
-      port: 80            # Port exposed by the service
-      targetPort: 5000    # Port exposed by the container in the deployment
-  type: ClusterIP         # Default service type, adjust if you need external access
+    - port: 27017
+      targetPort: 27017
+  selector:
+    app: mongodb
+

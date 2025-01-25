@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: stocks-manager-pvc
-  namespace: stocks-app  # Matches the namespace of the deployment
+  name: db-pvc
+  namespace: stocks-manager # Matches the namespace of the deployment
   labels:
-    app: stocks-manager
+    app: mongodb
 spec:
   accessModes:
     - ReadWriteOnce
