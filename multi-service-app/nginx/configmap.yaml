@@ -39,12 +39,12 @@ data:
             location /kill {
                 proxy_pass http://stocks;
             }
-
             # Allow requests to /portfolio-value and /stocks-value through NGINX
+
             location /portfolio-value {
                 proxy_pass http://stocks;
             }
-            location /stocks-value {
+            location /stock-value {
                 proxy_pass http://stocks;
             }
 

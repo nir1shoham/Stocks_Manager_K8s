@@ -4,7 +4,7 @@ from bson import ObjectId
 from bson.errors import InvalidId
 from Core.Exceptions import StockNotFoundError
 
-uri = "mongodb://db-service:27017/"
+uri = "mongodb://db-service.stocks-manager.svc.cluster.local:27017/"
 client = MongoClient(uri)
 COLLECTION_NAME = "stocks"
 db = client[COLLECTION_NAME]
