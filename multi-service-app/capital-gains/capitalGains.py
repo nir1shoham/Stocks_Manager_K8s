@@ -1,6 +1,5 @@
 import requests
-from Core.stockValue import get_stock_price
-from Core.Exceptions import *
+from Exceptions import *
 
 
 def get_stocks_with_filter(query_params: dict = {}) -> dict:
@@ -55,3 +54,16 @@ def get_capital_gains(query_params):
     
     total_capital_gains = round(total_capital_gains, 2)   
     return total_capital_gains
+
+
+def get_stock_price(symbol):
+    api_url = 'https://api.api-ninjas.com/v1/stockprice?ticker={}'.format(symbol)
+    response = requests.get(api_url, headers={'X-Api-Key': 'peWnazBtxCHAPRycoAEieg==GPY29SAAvj4oRqYI'})
+    if not response or response.status_code != 200:
+        raise ExternalAPIServiceError(f"API response code {response.status_code}")
+        
+    response_json = response.json()
+    if isinstance(response_json, list) or 'price' not in response_json:
+        raise StockNotFoundError("Stock not found")
+    
+    return response_json.get('price')

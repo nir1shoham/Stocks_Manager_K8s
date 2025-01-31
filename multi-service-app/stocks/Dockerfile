@@ -5,9 +5,8 @@ FROM python:alpine3.17
 WORKDIR /Stocks
 # Copy the rest of the application files into the container
 
-COPY ./Core ./Core
-COPY ./database ./database
-COPY ./stocks .
+
+COPY . .
 
 # Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt

@@ -38,14 +38,10 @@ if [[ "$stocks_image_name" = "null" || "$capital_gains_image_name" == "null" ]];
 fi
 
 echo "building the stocks docker image with the following tag:" $stocks_image_name
-# docker build -t $stocks_image_name ./multi-service-app/stocks
-docker build -t $stocks_image_name .
-
+docker build -t $stocks_image_name ./multi-service-app/stocks
 
 echo "building the capital-gains docker image with the following tag:" $capital_gains_image_name
-# docker build -t $capital_gains_image_name ./multi-service-app/capital-gains
-docker build -t $capital_gains_image_name .
-
+docker build -t $capital_gains_image_name ./multi-service-app/capital-gains
 
 # Load the Docker images into the KIND cluster
 kind load docker-image $stocks_image_name --name $cluster_name

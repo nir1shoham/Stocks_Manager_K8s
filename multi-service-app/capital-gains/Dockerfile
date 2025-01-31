@@ -5,9 +5,7 @@ FROM python:alpine3.17
 WORKDIR /CapitalGains
 # Copy relevant application files and directories
 
-COPY ./Core ./Core
-COPY ./stocks ./stocks
-COPY ./capital-gains .
+COPY . .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt

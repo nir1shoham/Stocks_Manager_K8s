@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError, PyMongoError
 from bson import ObjectId
 from bson.errors import InvalidId
-from Core.Exceptions import StockNotFoundError
+from Exceptions import StockNotFoundError
 
 uri = "mongodb://db-service.stocks-manager.svc.cluster.local:27017/"
 client = MongoClient(uri)

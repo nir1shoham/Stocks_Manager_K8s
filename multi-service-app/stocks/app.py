@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify
 from functools import wraps
 from stocksManager import StocksManager
-from Core.Exceptions import *
+from Exceptions import *
 
 app = Flask(__name__)
 stocks_manager = StocksManager()  # Create an instance of the StocksManager
@@ -62,7 +62,6 @@ def get_stock_value(stock_id):
 def get_portfolio_value():
     return jsonify(stocks_manager.get_portfolio_value()), 200
 
-##TODO check
 @app.get('/kill')
 def kill_container():
     os._exit(1)

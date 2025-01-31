@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 import capitalGains
+from Exceptions import *
 
 app = Flask(__name__)
-from Core.Exceptions import *
 
 @app.get('/capital-gains')
 def get_capital_gains():

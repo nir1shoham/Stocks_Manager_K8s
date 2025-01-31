@@ -1,8 +1,8 @@
-from Core.Exceptions import *
+from Exceptions import *
 from datetime import datetime
-from Core.stockValue import get_stock_price
 from pymongo.errors import DuplicateKeyError
-import database.MongoDBService as mongoDBService
+import MongoDBService as mongoDBService
+import requests
 
 STOCKS_FIELDS = ['id', 'symbol', 'name', 'shares', 'purchase price', 'purchase date']
 
@@ -95,7 +95,7 @@ class StocksManager:
         totalValue = 0
         
         for stock in stocks:
-            totalValue += stock["shares"] * get_stock_price(stock['symbol'])
+            totalValue += stock["shares"] * self.get_stock_price(stock['symbol'])
             
         return {
             "date": self.get_today_date(),
@@ -110,7 +110,7 @@ class StocksManager:
         if not stock:
             raise StockNotFoundError("Not found")
         
-        price = get_stock_price(stock['symbol'])
+        price = self.get_stock_price(stock['symbol'])
         
         return {
             "symbol": stock['symbol'],
@@ -120,6 +120,7 @@ class StocksManager:
 
     def validate_stock_data(self, data, update=False):
         required_fields = ['symbol', 'shares', 'purchase price'] if not update else STOCKS_FIELDS
+        allowed_fields = ['symbol', 'name', 'shares', 'purchase price', 'purchase date'] if not update else STOCKS_FIELDS
         
         # Ensure required fields are present
         for field in required_fields:
@@ -128,7 +129,7 @@ class StocksManager:
 
         for field, value in data.items():
             # Validate if the field is allowed
-            if field not in STOCKS_FIELDS:
+            if field not in allowed_fields:
                 raise InvalidFieldError(f"Invalid field: {field}")
 
             if field == 'shares':
@@ -158,3 +159,15 @@ class StocksManager:
                     raise InvalidFieldError(f"{field.capitalize()} must be a string")
                 if field == 'symbol' and not value.isupper():
                     raise InvalidFieldError("Symbol must be uppercase")
+
+    def get_stock_price(self, symbol):
+        api_url = 'https://api.api-ninjas.com/v1/stockprice?ticker={}'.format(symbol)
+        response = requests.get(api_url, headers={'X-Api-Key': 'peWnazBtxCHAPRycoAEieg==GPY29SAAvj4oRqYI'})
+        if not response or response.status_code != 200:
+            raise ExternalAPIServiceError(f"API response code {response.status_code}")
+        
+        response_json = response.json()
+        if isinstance(response_json, list) or 'price' not in response_json:
+            raise StockNotFoundError("Stock not found")
+    
+        return response_json.get('price')

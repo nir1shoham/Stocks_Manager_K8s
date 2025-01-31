@@ -11,5 +11,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: standard
+  persistentVolumeReclaimPolicy: Retain  # Prevents deletion of data when PVC is deleted
   hostPath:
-    path: /mnt/data/mongodb  # Updated path to match the stocks-manager application
+    path: /var/lib/mongodb  # Use a persistent directory on the node
