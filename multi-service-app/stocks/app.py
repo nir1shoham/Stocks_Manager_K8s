@@ -3,9 +3,11 @@ from flask import Flask, request, jsonify
 from functools import wraps
 from stocksManager import StocksManager
 from Exceptions import *
+import threading
 
 app = Flask(__name__)
 stocks_manager = StocksManager()  # Create an instance of the StocksManager
+lock = threading.Lock()  # Create a lock for thread safety
 
 def require_json(f):
     @wraps(f)
@@ -30,37 +32,49 @@ def handle_exception(e):
 @app.get('/stocks')
 def get_stocks():
     query_params = request.args.to_dict()
-    stocks = stocks_manager.get_stocks(query_params)
+    with lock:
+        stocks = stocks_manager.get_stocks(query_params)
     return jsonify(stocks), 200
 
 @app.post('/stocks')
 @require_json
 def add_stock():
     stockData = request.get_json()
-    return jsonify(stocks_manager.add_stock(stockData)), 201
+    with lock:
+        result = stocks_manager.add_stock(stockData)
+    return jsonify(result), 201
 
 @app.get('/stocks/<stock_id>')
 def get_stock(stock_id):
-    return jsonify(stocks_manager.get_stock(stock_id)), 200
+    with lock:
+        stock = stocks_manager.get_stock(stock_id)
+    return jsonify(stock), 200
 
 @app.delete('/stocks/<stock_id>')
 def delete_stock(stock_id):
-    stocks_manager.delete_stock(stock_id)
+    with lock:
+        stocks_manager.delete_stock(stock_id)
     return '', 204
 
 @app.put('/stocks/<stock_id>')
 @require_json
 def update_stock(stock_id):
     stockData = request.get_json()
-    return jsonify(stocks_manager.update_stock(stockData, stock_id)), 200
+    with lock:
+        result = stocks_manager.update_stock(stockData, stock_id)
+    return jsonify(result), 200
 
 @app.get('/stock-value/<stock_id>')
 def get_stock_value(stock_id):
-    return jsonify(stocks_manager.get_stock_value(stock_id)), 200
+    with lock:
+        stock_value = stocks_manager.get_stock_value(stock_id)
+    return jsonify(stock_value), 200
 
 @app.get('/portfolio-value')
 def get_portfolio_value():
-    return jsonify(stocks_manager.get_portfolio_value()), 200
+    with lock:
+        portfolio_value = stocks_manager.get_portfolio_value()
+    return jsonify(portfolio_value), 200
 
 @app.get('/kill')
 def kill_container():
