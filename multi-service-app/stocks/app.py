@@ -7,7 +7,7 @@ import threading
 
 app = Flask(__name__)
 stocks_manager = StocksManager()  # Create an instance of the StocksManager
-lock = threading.Lock()  # Create a lock for thread safety
+lock = threading.Lock()
 
 def require_json(f):
     @wraps(f)
